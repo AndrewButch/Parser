@@ -33,42 +33,56 @@ def read_links(path):
     return links
 
 def find_finance_page(url):
-    bs = BeautifulSoup(url, "lxml")
-    refs = bs.find("div", class_ = "company_summary_tabs").find_all("a")
+    print("Finance URL: ", url)
+    STR = "Fundamentals"
+    html = get_html(url)
+    bs = BeautifulSoup(html, "lxml")
+    refs = bs.find("div", class_ = "company_summary_tabs").find_all("a", class_ = "btn")
     for ref in refs:
         title = ref.get("title")
-        if title is not "Fundamentals":
-            continue
+        if title == STR:
+            a = "https://www.londonstockexchange.com" + ref.get("href")
+            return a
         else:
-            return ref.get("href")
+            continue
     return " "
 
 def get_per_tax(url):
-    bs = BeautifulSoup(url, "lxml")
-    table = bs.find("div", class_ = "table_dati")
+    print("Pre_tax URL: ", url)
+    html = get_html(url)
+    bs = BeautifulSoup(html, "lxml")
+    table = bs.find("table", class_ = "table_dati")
     ths = table.find_all("th")
     titles = []
     for th in ths:
-        print(th.text)
-        titles.append(th.text)
+        s = str(th.text)
+        print ("S: ", s)
+        newstr = s[:s.index(" ")]
+        #print(newstr)
+        titles.append(newstr)
+        print("Titles: ", titles)
 
 
 def main():
     LIST_PATH = "assets\ListLondonExchange.csv"  # путь к списку
 
     # 1. Прочитать ссылки
-    links = read_links(LIST_PATH)
+    #links = read_links(LIST_PATH)
 
     # 2. Найти страничку с финансами
     data = []
-    for link in links:
-        page = find_finance_page(link)
-        if page is "":
-            data.append(link)
+    #for link in links:
 
-        else:
-            data.append(get_per_tax(link))
-        write_csv(data)
+    link = "https://www.londonstockexchange.com/exchange/prices-and-markets/stocks/summary/company-summary/GB00BCDBXK43GBGBXASX1.html"
+
+    pageURL = find_finance_page(link)
+    if pageURL is "":
+        data.append(link)
+
+    else:
+        per_tax = get_per_tax(pageURL)
+        data.append(per_tax)
+    write_csv(data)
 
 
 
