@@ -102,7 +102,7 @@ def get_per_tax(url):
 
 def main():
     LIST_PATH = "assets\ListLondonExchange.csv"  # путь к списку
-    START_FROM = 13168
+    START_FROM = 16326
 
     links = read_links(LIST_PATH)               # 1. Прочитать ссылки
 
