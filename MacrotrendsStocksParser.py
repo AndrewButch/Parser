@@ -126,7 +126,7 @@ def get_per_tax(url):
 def main():
     start = datetime.datetime.now()
 
-    LIST_PATH = "assets\ListMacrotrends.csv"    # путь к списку
+    LIST_PATH = "assets\ListQuarterlyMacrotrends.csv"    # путь к списку
     ANNUAL = "?freq=A"                          # Annual добавка к URL
     QUARTERLY = "?freq=Q"                       # Quarterly добавка к URL
 
